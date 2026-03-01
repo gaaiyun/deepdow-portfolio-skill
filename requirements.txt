@@ -1,0 +1,11 @@
+deepdow
+torch>=1.5
+numpy>=1.16.5
+pandas
+matplotlib
+seaborn
+cvxpylayers
+mlflow
+tensorboard
+tqdm
+pillow
