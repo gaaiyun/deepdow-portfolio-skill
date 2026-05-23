@@ -15,13 +15,13 @@ try:
     from deepdow.visualize import generate_weights_table, plot_weight_heatmap
     import matplotlib.pyplot as plt
 except ImportError:
-    print("❌ deepdow 未安装！请运行: pip install deepdow")
+    print(" deepdow 未安装！请运行: pip install deepdow")
     exit(1)
 
 
 def load_model(model_path):
     """加载模型"""
-    print(f"📂 加载模型: {model_path}")
+    print(f" 加载模型: {model_path}")
     
     checkpoint = torch.load(model_path)
     
@@ -38,7 +38,7 @@ def load_model(model_path):
     network.load_state_dict(checkpoint['model_state_dict'])
     network.eval()
     
-    print(f"  ✅ 模型加载成功")
+    print(f"   模型加载成功")
     print(f"  - 资产数: {checkpoint['n_assets']}")
     print(f"  - 回看窗口: {checkpoint['lookback']}")
     
@@ -47,15 +47,15 @@ def load_model(model_path):
 
 def load_test_data(data_path, lookback):
     """加载测试数据"""
-    print(f"\n📂 加载测试数据: {data_path}")
+    print(f"\n 加载测试数据: {data_path}")
     
     df = pd.read_csv(data_path, index_col=0, parse_dates=True)
     returns = df.values
     asset_names = df.columns.tolist()
     dates = df.index
     
-    print(f"  ✅ 数据形状: {returns.shape}")
-    print(f"  ✅ 时间范围: {dates[0]} 至 {dates[-1]}")
+    print(f"   数据形状: {returns.shape}")
+    print(f"   时间范围: {dates[0]} 至 {dates[-1]}")
     
     # 准备预测数据
     X_list = []
@@ -72,7 +72,7 @@ def load_test_data(data_path, lookback):
 
 def predict(network, X, means, stds):
     """预测权重"""
-    print("\n🔮 开始预测...")
+    print("\n 开始预测...")
     
     # 标准化
     X_scaled = (X - means) / stds
@@ -84,7 +84,7 @@ def predict(network, X, means, stds):
     
     weights_np = weights.numpy()
     
-    print(f"  ✅ 预测完成，生成 {len(weights_np)} 个配置")
+    print(f"   预测完成，生成 {len(weights_np)} 个配置")
     
     return weights_np
 
@@ -93,10 +93,10 @@ def save_predictions(weights, asset_names, dates, output_path):
     """保存预测结果"""
     df = pd.DataFrame(weights, columns=asset_names, index=dates)
     df.to_csv(output_path)
-    print(f"\n💾 保存预测结果: {output_path}")
+    print(f"\n 保存预测结果: {output_path}")
     
     # 显示统计
-    print("\n📊 预测统计:")
+    print("\n 预测统计:")
     print(df.describe())
     
     return df
@@ -104,7 +104,7 @@ def save_predictions(weights, asset_names, dates, output_path):
 
 def visualize_predictions(weights_df, output_dir):
     """可视化预测结果"""
-    print("\n📈 生成可视化...")
+    print("\n 生成可视化...")
     
     # 权重热图
     plt.figure(figsize=(14, 8))
@@ -116,7 +116,7 @@ def visualize_predictions(weights_df, output_dir):
     plt.yticks(range(len(weights_df.columns)), weights_df.columns)
     plt.tight_layout()
     plt.savefig(output_dir / "weights_heatmap.png", dpi=150, bbox_inches='tight')
-    print(f"  ✅ 保存权重热图: {output_dir / 'weights_heatmap.png'}")
+    print(f"   保存权重热图: {output_dir / 'weights_heatmap.png'}")
     
     # 权重分布
     plt.figure(figsize=(12, 6))
@@ -127,7 +127,7 @@ def visualize_predictions(weights_df, output_dir):
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig(output_dir / "weights_area.png", dpi=150, bbox_inches='tight')
-    print(f"  ✅ 保存权重分布图: {output_dir / 'weights_area.png'}")
+    print(f"   保存权重分布图: {output_dir / 'weights_area.png'}")
     
     # 集中度分析
     concentration = (weights_df ** 2).sum(axis=1)
@@ -142,7 +142,7 @@ def visualize_predictions(weights_df, output_dir):
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.savefig(output_dir / "concentration.png", dpi=150, bbox_inches='tight')
-    print(f"  ✅ 保存集中度图: {output_dir / 'concentration.png'}")
+    print(f"   保存集中度图: {output_dir / 'concentration.png'}")
 
 
 def main():
@@ -154,7 +154,7 @@ def main():
     args = parser.parse_args()
     
     print("=" * 60)
-    print("🔮 deepdow 预测脚本")
+    print(" deepdow 预测脚本")
     print("=" * 60)
     
     # 加载模型
@@ -165,7 +165,7 @@ def main():
     
     # 检查资产名称
     if asset_names != checkpoint['asset_names']:
-        print("\n⚠️  警告: 测试数据资产与训练数据不一致！")
+        print("\n  警告: 测试数据资产与训练数据不一致！")
         print(f"  训练: {checkpoint['asset_names']}")
         print(f"  测试: {asset_names}")
     
@@ -182,9 +182,9 @@ def main():
     visualize_predictions(weights_df, output_dir)
     
     print("\n" + "=" * 60)
-    print("✅ 预测完成！")
+    print(" 预测完成！")
     print("=" * 60)
-    print(f"\n📁 输出文件:")
+    print(f"\n 输出文件:")
     print(f"  - 预测结果: {output_dir / 'predictions.csv'}")
     print(f"  - 权重热图: {output_dir / 'weights_heatmap.png'}")
     print(f"  - 权重分布: {output_dir / 'weights_area.png'}")

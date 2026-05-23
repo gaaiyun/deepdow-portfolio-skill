@@ -1,11 +1,14 @@
-deepdow
-torch>=1.5
-numpy>=1.16.5
-pandas
-matplotlib
-seaborn
-cvxpylayers
-mlflow
-tensorboard
-tqdm
-pillow
+# 核心依赖（baselines + portfolio_eval + data_io + SimpleNet 这条 v2 路径）
+numpy>=1.21
+pandas>=1.3
+torch>=1.10
+
+# 可选：跑可视化 / 用 examples 里的 matplotlib 图
+matplotlib>=3.4
+
+# 可选：从 yfinance 抓真实日线（python __main__.py fetch）
+# pip install yfinance
+
+# 可选：跑 scripts/train.py / scripts/predict.py 那条用真 deepdow 框架的路径
+# pip install deepdow
+# pip install cvxpylayers   # train.py 的 PortfolioNet 不需要它，但 deepdow 完整功能需要

@@ -20,7 +20,7 @@ try:
     from deepdow.losses import MeanReturns, SharpeRatio, MaximumDrawdown
     from deepdow.visualize import generate_metrics_table, plot_metrics
 except ImportError:
-    print("❌ deepdow 未安装！请运行: pip install deepdow")
+    print(" deepdow 未安装！请运行: pip install deepdow")
     exit(1)
 
 
@@ -74,15 +74,15 @@ def load_data(data_path):
     asset_names : list
         资产名称列表
     """
-    print(f"📂 加载数据: {data_path}")
+    print(f" 加载数据: {data_path}")
     
     df = pd.read_csv(data_path, index_col=0, parse_dates=True)
     returns = df.values
     asset_names = df.columns.tolist()
     
-    print(f"  ✅ 数据形状: {returns.shape}")
-    print(f"  ✅ 资产数量: {len(asset_names)}")
-    print(f"  ✅ 时间范围: {df.index[0]} 至 {df.index[-1]}")
+    print(f"   数据形状: {returns.shape}")
+    print(f"   资产数量: {len(asset_names)}")
+    print(f"   时间范围: {df.index[0]} 至 {df.index[-1]}")
     
     return returns, asset_names
 
@@ -133,7 +133,7 @@ def prepare_dataset(returns, lookback, gap, horizon, train_ratio=0.8):
     means, stds = prepare_standard_scaler(X, indices=indices_train)
     dataset = InRAMDataset(X, y, transform=Scale(means, stds))
     
-    print(f"\n📊 数据集准备完成:")
+    print(f"\n 数据集准备完成:")
     print(f"  - 样本数: {n_samples}")
     print(f"  - 训练集: {len(indices_train)}")
     print(f"  - 测试集: {len(indices_test)}")
@@ -143,7 +143,7 @@ def prepare_dataset(returns, lookback, gap, horizon, train_ratio=0.8):
 
 def train_model(network, loss_fn, dataloader_train, dataloader_test, epochs, lr):
     """训练模型"""
-    print(f"\n🏋️ 开始训练 ({epochs} epochs)...")
+    print(f"\n 开始训练 ({epochs} epochs)...")
     
     run = Run(
         network,
@@ -160,13 +160,13 @@ def train_model(network, loss_fn, dataloader_train, dataloader_test, epochs, lr)
     
     history = run.launch(epochs)
     
-    print("✅ 训练完成！")
+    print(" 训练完成！")
     return history
 
 
 def evaluate_model(network, dataloader_test, output_dir):
     """评估模型"""
-    print("\n📊 评估模型...")
+    print("\n 评估模型...")
     
     network = network.eval()
     
@@ -186,7 +186,7 @@ def evaluate_model(network, dataloader_test, output_dir):
     # 可视化
     fig = plot_metrics(metrics_table)
     plt.savefig(output_dir / "metrics.png", dpi=150, bbox_inches='tight')
-    print(f"  ✅ 保存指标图: {output_dir / 'metrics.png'}")
+    print(f"   保存指标图: {output_dir / 'metrics.png'}")
     
     return metrics_table
 
@@ -206,7 +206,7 @@ def main():
     args = parser.parse_args()
     
     print("=" * 60)
-    print("🚀 deepdow 训练脚本 - 真实数据")
+    print(" deepdow 训练脚本 - 真实数据")
     print("=" * 60)
     
     # 设置随机种子
@@ -227,7 +227,7 @@ def main():
     dataloader_test = RigidDataLoader(dataset, indices=indices_test, batch_size=args.batch_size)
     
     # 创建网络
-    print(f"\n🧠 创建网络 (hidden_size={args.hidden_size})...")
+    print(f"\n 创建网络 (hidden_size={args.hidden_size})...")
     network = PortfolioNet(
         n_channels=1,
         n_assets=n_assets,
@@ -258,10 +258,10 @@ def main():
         'stds': stds,
         'asset_names': asset_names
     }, model_path)
-    print(f"\n💾 保存模型: {model_path}")
+    print(f"\n 保存模型: {model_path}")
     
     print("\n" + "=" * 60)
-    print("✅ 训练完成！")
+    print(" 训练完成！")
     print("=" * 60)
 
 
