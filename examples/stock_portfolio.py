@@ -19,7 +19,7 @@ try:
     from deepdow.visualize import generate_metrics_table, plot_metrics
     import matplotlib.pyplot as plt
 except ImportError:
-    print("❌ deepdow 未安装！请运行: pip install deepdow")
+    print("deepdow 未安装！请运行: pip install deepdow")
     exit(1)
 
 
@@ -36,7 +36,7 @@ def calculate_technical_indicators(prices):
     features : np.ndarray
         特征矩阵，形状 (n_timesteps, n_channels, n_assets)
     """
-    print("📊 计算技术指标...")
+    print("计算技术指标...")
     
     # 1. 收益率
     returns = prices.pct_change().fillna(0)
@@ -70,8 +70,8 @@ def calculate_technical_indicators(prices):
         bb_position.values
     ], axis=1)
     
-    print(f"  ✅ 特征形状: {features.shape}")
-    print(f"  ✅ 特征: 收益率, 动量, 波动率, RSI, 布林带")
+    print(f"  特征形状: {features.shape}")
+    print(f"  特征: 收益率, 动量, 波动率, RSI, 布林带")
     
     return features
 
@@ -95,7 +95,7 @@ def prepare_stock_dataset(prices, lookback=40, gap=2, horizon=20):
     X = np.stack(X_list, axis=0)
     y = np.stack(y_list, axis=0)[:, None, ...]
     
-    print(f"\n📊 数据集准备:")
+    print(f"\n数据集准备:")
     print(f"  - X 形状: {X.shape}")
     print(f"  - y 形状: {y.shape}")
     
@@ -104,7 +104,7 @@ def prepare_stock_dataset(prices, lookback=40, gap=2, horizon=20):
 
 def main():
     print("=" * 60)
-    print("📈 多因子股票组合优化示例")
+    print("多因子股票组合优化示例")
     print("=" * 60)
     
     # 设置随机种子
@@ -112,7 +112,7 @@ def main():
     np.random.seed(42)
     
     # 生成模拟股票价格数据
-    print("\n📊 生成模拟股票数据...")
+    print("\n生成模拟股票数据...")
     n_timesteps, n_assets = 1000, 50
     
     # 模拟价格（随机游走 + 趋势）
@@ -120,7 +120,7 @@ def main():
     returns = np.random.normal(0.0005, 0.02, (n_timesteps, n_assets))
     prices = pd.DataFrame(100 * np.exp(returns.cumsum(axis=0)))
     
-    print(f"  ✅ 生成 {n_assets} 只股票，{n_timesteps} 个时间步")
+    print(f"  生成 {n_assets} 只股票，{n_timesteps} 个时间步")
     
     # 准备数据集
     lookback, gap, horizon = 40, 2, 20
@@ -140,7 +140,7 @@ def main():
     dataloader_test = RigidDataLoader(dataset, indices=indices_test, batch_size=32)
     
     # 创建网络
-    print("\n🧠 创建 BachelierNet...")
+    print("\n创建 BachelierNet...")
     network = BachelierNet(
         n_input_channels=5,  # 5个技术指标
         n_assets=n_assets,
@@ -156,7 +156,7 @@ def main():
     loss = SharpeRatio() + MaximumDrawdown()
     
     # 训练
-    print("\n🏋️ 开始训练...")
+    print("\n开始训练...")
     run = Run(
         network,
         loss,
@@ -173,7 +173,7 @@ def main():
     history = run.launch(30)
     
     # 评估
-    print("\n📊 评估模型...")
+    print("\n评估模型...")
     network = network.eval()
     
     benchmarks = {
@@ -194,7 +194,7 @@ def main():
     
     fig = plot_metrics(metrics_table)
     plt.savefig(output_dir / "metrics.png", dpi=150, bbox_inches='tight')
-    print(f"\n✅ 保存指标图: {output_dir / 'metrics.png'}")
+    print(f"\n保存指标图: {output_dir / 'metrics.png'}")
     
     # 保存模型
     torch.save({
@@ -204,7 +204,7 @@ def main():
     }, output_dir / "model.pth")
     
     print("\n" + "=" * 60)
-    print("✅ 股票组合优化示例完成！")
+    print("股票组合优化示例完成！")
     print("=" * 60)
 
 
